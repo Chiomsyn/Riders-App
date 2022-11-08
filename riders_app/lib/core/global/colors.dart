@@ -6,4 +6,4 @@ const white = Colors.white;
 const grey = Colors.grey;
 const blue = Colors.blue;
 const Color mTransparent = Color(0x00FFFFFF);
-const Color mPrimary = Color(0xFF131027);
+const Color mPrimary = Colors.blueAccent;

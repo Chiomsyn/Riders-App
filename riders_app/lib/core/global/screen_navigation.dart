@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 
-void changeScreen(BuildContext context, Widget widget){
-Navigator.push(context, MaterialPageRoute(builder:(context) => widget));
+void changeScreen(BuildContext context, Widget widget) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
 }
 
-void changeScreenReplacement(BuildContext context, Widget widget){
-Navigator.pushReplacement(context, MaterialPageRoute(builder:(context) => widget));
+void changeScreenReplacement(BuildContext context, Widget widget) {
+  Navigator.pushReplacement(
+      context, MaterialPageRoute(builder: (context) => widget));
 }
 
-void changeScreenReplacementNamed(BuildContext context, String widget){
-Navigator.pushReplacementNamed(context, widget);
+void changeScreenReplacementNamed(BuildContext context, String widget) {
+  Navigator.pushReplacementNamed(context, widget);
 }
 
-void changeScreenNamed(BuildContext context, String widget){
-Navigator.pushNamed(context, widget);
+void changeScreenNamed(BuildContext context, String widget) {
+  Navigator.pushNamed(context, widget);
+}
+
+void pop(BuildContext context) {
+  Navigator.of(context).pop();
 }

@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'package:riders_app/data_handler/auth.dart';
 import 'package:riders_app/presentation/pages/auth/log_in.dart';
 import 'package:riders_app/presentation/pages/auth/sign_up.dart';
 
 import 'presentation/pages/onboarding_screen.dart';
+import 'presentation/pages/profile_page.dart';
+import 'presentation/pages/verification_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [ChangeNotifierProvider.value(value: AuthHandler())],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,6 +29,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const OnboardingScreen());
+        home: const LogInPage());
   }
 }

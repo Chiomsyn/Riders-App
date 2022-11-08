@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:riders_app/core/global/images.dart';
+import 'package:riders_app/data_handler/auth.dart';
 import 'package:riders_app/presentation/pages/auth/log_in.dart';
+import 'package:riders_app/presentation/pages/verification_page.dart';
 import 'package:riders_app/presentation/widget/auth/nav_log_reg.dart';
 import 'package:riders_app/presentation/widget/edit_box.dart';
 import 'package:riders_app/presentation/widget/image_bg.dart';
@@ -19,15 +22,12 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  TextEditingController email = TextEditingController();
-  TextEditingController number = TextEditingController();
-  TextEditingController name = TextEditingController();
-  TextEditingController password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _showPassword = true;
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthHandler>(context);
     return SafeArea(
         child: Scaffold(
             body: Stack(
@@ -49,19 +49,19 @@ class _SignUpPageState extends State<SignUpPage> {
                             iconClick: () {},
                             hintText: "Enter name",
                             label: "Name",
-                            controller: name,
+                            controller: auth.name,
                             validator: (val) {}),
                         AppEditBox(
                             iconClick: () {},
                             hintText: "Enter phone number",
                             label: "Phone Number",
-                            controller: number,
+                            controller: auth.number,
                             validator: (val) {}),
                         AppEditBox(
                             iconClick: () {},
                             hintText: "Enter email address",
                             label: "Email Address",
-                            controller: email,
+                            controller: auth.email,
                             validator: (val) {}),
                         AppEditBox(
                             iconClick: () {
@@ -73,7 +73,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             label: "Password",
                             showPassword: _showPassword,
                             isPassword: true,
-                            controller: password,
+                            controller: auth.password,
                             validator: (val) {}),
                         ServicePolicyWidget(
                           policyClick: () {},
@@ -82,15 +82,34 @@ class _SignUpPageState extends State<SignUpPage> {
                         const SizedBox(
                           height: 50,
                         ),
-                        AppBtn(onClick: () {}, txt: "Continue"),
+                        AppBtn(
+                            onClick: () async {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text('snack'),
+                                duration: Duration(seconds: 1),
+                                // action: SnackBarAction(
+                                //   label: 'ACTION',
+                                //   onPressed: () {},
+                                // ),
+                              ));
+
+                              await auth.createUser();
+                              if (auth.status == Status.userCreated) {
+                                changeScreen(context, const VerificationPage());
+                              }
+                            },
+                            txt: "Continue"),
                         const SizedBox(
                           height: 20,
                         ),
                         NavToLogRegWidget(
                             txt2: 'Log in',
-                            txt1: 'Already have an account? ',
-                            onClick: () => changeScreenReplacement(
-                                context, const LogInPage()))
+                            txt1: 'Already have an account?',
+                            onClick: () {
+                              changeScreenReplacement(
+                                  context, const LogInPage());
+                            })
                       ],
                     ))
               ]),

@@ -2,25 +2,26 @@ import 'package:flutter/material.dart';
 
 class AppBtn extends StatelessWidget {
   VoidCallback onClick;
-  bool borderSide = false;
+  bool? borderSide;
   String txt;
-  AppBtn({super.key, required this.onClick, required this.txt});
+  AppBtn(
+      {this.borderSide, super.key, required this.onClick, required this.txt});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
+      onPressed: onClick,
       style: ElevatedButton.styleFrom(
-          backgroundColor: borderSide ? null : Color(0xff2196F3),
+          backgroundColor: (borderSide != null) ? Colors.transparent : null,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
               side: const BorderSide(color: Color(0xff2196F3)))),
-      onPressed: onClick,
       child: SizedBox(
         height: 40.0,
         child: Center(
           child: Text(
             txt,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18.0,
             ),
           ),

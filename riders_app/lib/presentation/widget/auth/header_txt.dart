@@ -9,7 +9,7 @@ class HeaderTextWidget extends StatelessWidget {
     return Text(
       txt,
       style: const TextStyle(
-          color: Colors.blueAccent, fontSize: 18, fontWeight: FontWeight.bold),
+          color: Colors.blueAccent, fontSize: 20, fontWeight: FontWeight.bold),
     );
   }
 }

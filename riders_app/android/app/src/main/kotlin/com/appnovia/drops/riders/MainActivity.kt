@@ -1,4 +1,4 @@
-package com.demo.users_uberclone
+package com.appnovia.drops.riders
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:riders_app/core/global/colors.dart';
 
 class ServicePolicyWidget extends StatelessWidget {
   VoidCallback termsClick;
@@ -17,7 +18,7 @@ class ServicePolicyWidget extends StatelessWidget {
           children: <TextSpan>[
             TextSpan(
                 text: 'Terms of Service ',
-                style: const TextStyle(color: Colors.blueAccent, fontSize: 13),
+                style: const TextStyle(color: mPrimary, fontSize: 13),
                 recognizer: TapGestureRecognizer()..onTap = termsClick),
             const TextSpan(
               text: 'and ',
@@ -25,7 +26,7 @@ class ServicePolicyWidget extends StatelessWidget {
             ),
             TextSpan(
                 text: 'Privacy Policy',
-                style: const TextStyle(color: Colors.blueAccent, fontSize: 13),
+                style: const TextStyle(color: mPrimary, fontSize: 13),
                 recognizer: TapGestureRecognizer()..onTap = policyClick),
           ]),
     );

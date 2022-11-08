@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:riders_app/core/global/colors.dart';
 
 class NavToLogRegWidget extends StatelessWidget {
   VoidCallback onClick;
@@ -20,7 +21,7 @@ class NavToLogRegWidget extends StatelessWidget {
           children: <TextSpan>[
             TextSpan(
                 text: txt2,
-                style: const TextStyle(color: Colors.blueAccent, fontSize: 13),
+                style: const TextStyle(color: mPrimary, fontSize: 13),
                 recognizer: TapGestureRecognizer()..onTap = onClick)
           ]),
     );

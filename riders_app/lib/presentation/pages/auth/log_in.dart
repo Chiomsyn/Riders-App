@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:riders_app/presentation/pages/auth/sign_up.dart';
 import 'package:riders_app/presentation/widget/auth/header_txt.dart';
 import 'package:riders_app/presentation/widget/auth/pre_icon_txt.dart';
@@ -6,6 +7,7 @@ import 'package:riders_app/presentation/widget/auth/sub_header_txt.dart';
 
 import '../../../core/global/images.dart';
 import '../../../core/global/screen_navigation.dart';
+import '../../../data_handler/auth.dart';
 import '../../widget/auth/nav_log_reg.dart';
 import '../../widget/auth/rem_me.dart';
 import '../../widget/btn.dart';
@@ -20,14 +22,11 @@ class LogInPage extends StatefulWidget {
 }
 
 class _LogInPageState extends State<LogInPage> {
-  TextEditingController email = TextEditingController();
-  TextEditingController number = TextEditingController();
-  TextEditingController name = TextEditingController();
-  TextEditingController password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthHandler>(context);
     return SafeArea(
         child: Scaffold(
             body: Stack(
@@ -49,14 +48,14 @@ class _LogInPageState extends State<LogInPage> {
                             iconClick: () {},
                             hintText: "Enter phone number",
                             label: "Phone Number",
-                            controller: number,
+                            controller: auth.number,
                             validator: (val) {}),
                         AppEditBox(
                             iconClick: () {},
                             hintText: "Enter Password",
                             label: "Password",
                             isPassword: true,
-                            controller: password,
+                            controller: auth.password,
                             validator: (val) {}),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

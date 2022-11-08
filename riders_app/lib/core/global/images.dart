@@ -5,4 +5,5 @@ class MImages {
   static const String on2 = "assets/images/image2.png";
   static const String on3 = "assets/images/image3.png";
   static const String on4 = "assets/images/image4.png";
+  static const String person = "assets/images/person.png";
 }
