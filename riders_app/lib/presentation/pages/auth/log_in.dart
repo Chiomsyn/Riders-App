@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:riders_app/core/global/colors.dart';
 import 'package:riders_app/presentation/pages/auth/sign_up.dart';
+import 'package:riders_app/presentation/pages/profile_page.dart';
 import 'package:riders_app/presentation/widget/auth/header_txt.dart';
 import 'package:riders_app/presentation/widget/auth/pre_icon_txt.dart';
 import 'package:riders_app/presentation/widget/auth/sub_header_txt.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/global/images.dart';
 import '../../../core/global/screen_navigation.dart';
@@ -32,7 +35,7 @@ class _LogInPageState extends State<LogInPage> {
             body: Stack(
       children: [
         ImageBgWidget(
-            image: MImages.on1,
+            image: MImages.selBgImg(context),
             child: SingleChildScrollView(
                 child: Padding(
               padding: const EdgeInsets.only(
@@ -46,9 +49,9 @@ class _LogInPageState extends State<LogInPage> {
                       children: [
                         AppEditBox(
                             iconClick: () {},
-                            hintText: "Enter phone number",
-                            label: "Phone Number",
-                            controller: auth.number,
+                            hintText: "Enter Email",
+                            label: "Email Address",
+                            controller: auth.email,
                             validator: (val) {}),
                         AppEditBox(
                             iconClick: () {},
@@ -65,7 +68,7 @@ class _LogInPageState extends State<LogInPage> {
                               val: false,
                             ),
                             PrefixIconTxt(
-                              color: Colors.blueAccent,
+                              color: mPrimary(context),
                               lbl: "Forget Password",
                               onClick: () {},
                               icon: Icons.question_mark,
@@ -75,7 +78,17 @@ class _LogInPageState extends State<LogInPage> {
                         const SizedBox(
                           height: 30,
                         ),
-                        AppBtn(onClick: () {}, txt: "Continue"),
+                        AppBtn(
+                            onClick: () async {
+                              if (await auth.logUserIn()) {
+                                SharedPreferences preferences =
+                                    await SharedPreferences.getInstance();
+                                await preferences.setInt('initScreen', 4);
+                                auth.clearControllers();
+                                changeScreenReplacement(context, ProfilePage());
+                              }
+                            },
+                            txt: "Continue"),
                         const SizedBox(
                           height: 20,
                         ),

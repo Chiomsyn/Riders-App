@@ -18,15 +18,15 @@ class ServicePolicyWidget extends StatelessWidget {
           children: <TextSpan>[
             TextSpan(
                 text: 'Terms of Service ',
-                style: const TextStyle(color: mPrimary, fontSize: 13),
+                style: TextStyle(color: mPrimary(context), fontSize: 13),
                 recognizer: TapGestureRecognizer()..onTap = termsClick),
-            const TextSpan(
+            TextSpan(
               text: 'and ',
-              style: TextStyle(color: Colors.white70, fontSize: 13),
+              style: Theme.of(context).textTheme.labelMedium,
             ),
             TextSpan(
                 text: 'Privacy Policy',
-                style: const TextStyle(color: mPrimary, fontSize: 13),
+                style: TextStyle(color: mPrimary(context), fontSize: 13),
                 recognizer: TapGestureRecognizer()..onTap = policyClick),
           ]),
     );

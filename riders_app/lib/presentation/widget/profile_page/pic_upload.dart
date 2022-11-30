@@ -23,7 +23,7 @@ class UploadPicWidget extends StatelessWidget {
               decoration: BoxDecoration(
                   border: Border.all(
                     width: 2.0,
-                    color: mPrimary,
+                    color: bgColor(context),
                   ),
                   borderRadius: BorderRadius.circular(100)),
               child: CircleAvatar(
@@ -43,7 +43,7 @@ class UploadPicWidget extends StatelessWidget {
               height: 30,
               width: 30,
               decoration: BoxDecoration(
-                color: mPrimary,
+                color: mPrimary(context),
                 borderRadius: BorderRadius.circular(100),
               ),
               child: Icon(Icons.camera_alt_outlined),

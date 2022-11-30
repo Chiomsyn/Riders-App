@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/global/colors.dart';
 import '../../../core/global/size.dart';
 
 class SubHeaderTxt extends StatelessWidget {
@@ -11,10 +10,7 @@ class SubHeaderTxt extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 20, bottom: size(context).height * 0.10),
-      child: Text(
-        txt,
-        style: const TextStyle(color: white, fontSize: 14),
-      ),
+      child: Text(txt, style: Theme.of(context).textTheme.titleMedium),
     );
   }
 }

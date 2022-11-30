@@ -30,7 +30,7 @@ class AppEditBox extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(color: Colors.white70),
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           Container(
             margin: const EdgeInsets.only(top: 10),
@@ -45,7 +45,7 @@ class AppEditBox extends StatelessWidget {
               validator: (String? value) => validator(value),
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Colors.blue[300]!.withOpacity(0.2),
+                fillColor: fillColor(context),
                 suffixIcon: isPassword != null
                     ? GestureDetector(
                         onTap: iconClick,
@@ -59,14 +59,14 @@ class AppEditBox extends StatelessWidget {
                       )
                     : null,
                 enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[900]!),
+                    borderSide: border(context),
                     borderRadius: BorderRadius.circular(10.0)),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[900]!),
+                    borderSide: border(context),
                     borderRadius: BorderRadius.circular(10.0)),
                 hintText: hintText, //hint text
-                hintStyle: TextStyle(
-                    fontSize: 12, color: Colors.white70), //hint text style
+                hintStyle:
+                    Theme.of(context).textTheme.labelMedium, //hint text style
                 hintMaxLines: 2,
               ),
             ),

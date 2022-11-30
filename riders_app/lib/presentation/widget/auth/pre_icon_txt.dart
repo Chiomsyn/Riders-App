@@ -22,7 +22,7 @@ class PrefixIconTxt extends StatelessWidget {
               style: TextStyle(
                   fontSize: 13, color: color, fontWeight: FontWeight.bold)),
           const SizedBox(
-            width: 1,
+            width: 2,
           ),
           Icon(
             icon,

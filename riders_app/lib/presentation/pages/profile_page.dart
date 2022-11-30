@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:riders_app/core/global/images.dart';
 import 'package:riders_app/presentation/widget/profile_page/profile_header.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/global/screen_navigation.dart';
 import '../widget/btn.dart';
@@ -36,7 +37,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   left: 20.0, right: 20, top: 15, bottom: 20),
               child: Column(
                 children: [
-                  ProfileHeader(bkClick: () => pop(context), doneClick: () {}),
+                  ProfileHeader(
+                      bkClick: () => pop(context),
+                      doneClick: () async {
+                        SharedPreferences preferences =
+                            await SharedPreferences.getInstance();
+                        await preferences.setInt('initScreen', 5);
+                      }),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: UploadPicWidget(
@@ -80,7 +87,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           const SizedBox(
                             height: 50,
                           ),
-                          AppBtn(onClick: () {}, txt: "Continue"),
+                          AppBtn(
+                              onClick: () async {
+                                SharedPreferences preferences =
+                                    await SharedPreferences.getInstance();
+                                await preferences.setInt('initScreen', 3);
+                              },
+                              txt: "Continue"),
                         ],
                       ))
                 ],

@@ -8,10 +8,18 @@ import 'package:riders_app/domain/auth.dart';
 import '../core/global/app_var.dart';
 import '../domain/notifications/push_notification.dart';
 
-enum Status { Uninitialized, userCreated, numberVerified, Authenticating }
+enum Status {
+  uninitialized,
+  userCreated,
+  numberVerified,
+  authenticating,
+  authenticated,
+  unauthenticated
+}
 
 class AuthHandler with ChangeNotifier {
-  Status _status = Status.Uninitialized;
+  Status _status = Status.uninitialized;
+  final FirebaseAuth _auth;
   String? verificationId;
   String otpCode = '123456';
   bool? isLoading = false;
@@ -26,10 +34,14 @@ class AuthHandler with ChangeNotifier {
     notifyListeners();
   }
 
+  AuthHandler.initialize() : _auth = FirebaseAuth.instance {
+    _auth.authStateChanges().listen(_onStateChanged);
+  }
+
   late List<String?> verificationCode;
   String? message = "";
 
-  List<TextEditingController> textControllers = [];
+  late List<TextEditingController?> textControllers;
 
   TextEditingController email = TextEditingController();
   TextEditingController number = TextEditingController();
@@ -72,21 +84,26 @@ class AuthHandler with ChangeNotifier {
     }
   }
 
-  logUserIn() async {
-    final User? firebaseUser = (await fAuth
-            .signInWithEmailAndPassword(
-                email: email.text, password: password.text)
-            .catchError((errmsg) {
-      print(" Error : $errmsg");
-    }))
-        .user;
-    if (firebaseUser != null) // user created
-    {
-      currentFirebaseUser = firebaseUser;
-      print("Congratulations, Login Successfuly");
-    } else {
-      print("Error : Account was not created");
+  Future<bool> logUserIn() async {
+    bool success = false;
+    try {
+      final User? firebaseUser = (await fAuth.signInWithEmailAndPassword(
+              email: email.text, password: password.text))
+          .user;
+
+      if (firebaseUser != null) // user created
+      {
+        currentFirebaseUser = firebaseUser;
+        print("Congratulations, Login Successfuly");
+        success = true;
+      } else {
+        print("Error : Account was not created");
+      }
+    } catch (e) {
+      print("${e}error");
     }
+
+    return success;
   }
 
   Future<bool> _phoneSignIn() async {
@@ -116,22 +133,24 @@ class AuthHandler with ChangeNotifier {
 
     otpCode = authCredential.smsCode ?? '';
     notifyListeners();
+    print(otpCode);
+    print("watsup");
 
-    User? user = fAuth.currentUser;
+    // User? user = fAuth.currentUser;
 
-    if (otpCode != null && _authCredential != null) {
-      try {
-        UserCredential credential =
-            await user!.linkWithCredential(_authCredential!);
-        signIn(_authCredential!);
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'provider-already-linked') {
-          message = "User already exits";
-          print(message);
-        }
-      }
-    }
-    notifyListeners();
+    // if (otpCode != null && _authCredential != null) {
+    //   try {
+    //     UserCredential credential =
+    //         await user!.linkWithCredential(_authCredential!);
+    //     signIn(_authCredential!);
+    //   } on FirebaseAuthException catch (e) {
+    //     if (e.code == 'provider-already-linked') {
+    //       message = "User already exits";
+    //       print(message);
+    //     }
+    //   }
+    // }
+    // notifyListeners();
   }
 
   signIn(PhoneAuthCredential authCredential) async {
@@ -148,8 +167,6 @@ class AuthHandler with ChangeNotifier {
   _onCodeSent(String verificationId, int? forceResendingToken) {
     resendToken = forceResendingToken;
     verificationId = verificationId;
-    print(forceResendingToken);
-    print("code sent");
   }
 
   _onCodeTimeout(String timeout) {
@@ -178,43 +195,14 @@ class AuthHandler with ChangeNotifier {
   }
 
   Future<bool> createUser() async {
-    TextEditingController ne = TextEditingController();
     isLoading = true;
     notifyListeners();
 
-    // if (await createUserWithEmail()) {
-    status = Status.userCreated;
-    notifyListeners();
-    // _phoneSignIn();
-
-    List<TextEditingController> y = [];
-
-    int count = 0;
-
-    textControllers = List<TextEditingController>.filled(
-      6,
-      TextEditingController(),
-    );
-
-    // if (otpCode != null) {
-    List me = "123458".split('');
-    List<String> v = [];
-
-    for (var element in me) {
-      y.add(ne);
-      y[count].text = element;
-      v.add(element);
-
-      count++;
+    if (await createUserWithEmail()) {
+      await _phoneSignIn();
+      status = Status.userCreated;
+      notifyListeners();
     }
-    print(y[4].text);
-    y.clear();
-    print(v[4]);
-    v.clear();
-
-    count = 0;
-
-    // }
     // } else {}
 
     message = "Congratulations, your account has been created.";
@@ -239,7 +227,7 @@ class AuthHandler with ChangeNotifier {
           firebaseUser, name.text, email.text, number.text, token);
 
       currentFirebaseUser = firebaseUser;
-      print("email");
+
       return true;
     } on Exception catch (e) {
       return false;
@@ -248,5 +236,15 @@ class AuthHandler with ChangeNotifier {
 
   Future logOutUser() async {
     await fAuth.signOut();
+  }
+
+  Future<void> _onStateChanged(User? firebaseUser) async {
+    if (firebaseUser == null) {
+      _status = Status.uninitialized;
+    } else {
+      currentFirebaseUser = firebaseUser;
+      _status = Status.authenticated;
+    }
+    notifyListeners();
   }
 }

@@ -20,7 +20,14 @@ class _OTPWidgetState extends State<OTPWidget> {
     super.initState();
     Provider.of<AuthHandler>(context, listen: false).verificationCode =
         List<String?>.filled(numOfOtp, null);
+
     _focusNodes = List<FocusNode?>.filled(numOfOtp, null);
+
+    Provider.of<AuthHandler>(context, listen: false).textControllers =
+        List<TextEditingController?>.filled(
+      numOfOtp,
+      null,
+    );
   }
 
   // @override
@@ -37,7 +44,7 @@ class _OTPWidgetState extends State<OTPWidget> {
 
     for (var controller
         in Provider.of<AuthHandler>(context, listen: false).textControllers) {
-      controller.clear();
+      controller!.clear();
 
       Provider.of<AuthHandler>(context, listen: false).verificationCode =
           List<String?>.filled(numOfOtp, null);
@@ -50,8 +57,8 @@ class _OTPWidgetState extends State<OTPWidget> {
 
     List<OTPEditboxWidget> otpEditList = List.generate(6, (int i) {
       addFocusNodeToEachTextField(index: i);
-      // addTextEditingControllerToEachTextField(
-      //     index: i, textControllers: auth.textControllers);
+      addTextEditingControllerToEachTextField(
+          index: i, textControllers: auth.textControllers);
 
       return OTPEditboxWidget(
         controller: auth.textControllers[i],

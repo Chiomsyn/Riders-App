@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:riders_app/core/global/colors.dart';
 
 class RememberWidget extends StatelessWidget {
   Function(bool?) onClick;
@@ -14,14 +15,14 @@ class RememberWidget extends StatelessWidget {
           width: 20,
           child: Checkbox(
               checkColor: Colors.blueAccent,
-              fillColor: MaterialStateProperty.all<Color>(Colors.blueAccent),
+              fillColor: MaterialStateProperty.all<Color>(mPrimary(context)),
               value: val,
               onChanged: (bool? value) => onClick),
         ),
-        const Text(
+        Text(
           "Remember me",
           style: TextStyle(
-              color: Colors.blueAccent,
+              color: mPrimary(context),
               fontSize: 13,
               fontWeight: FontWeight.bold),
         )

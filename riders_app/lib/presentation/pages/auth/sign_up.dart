@@ -7,6 +7,7 @@ import 'package:riders_app/presentation/pages/verification_page.dart';
 import 'package:riders_app/presentation/widget/auth/nav_log_reg.dart';
 import 'package:riders_app/presentation/widget/edit_box.dart';
 import 'package:riders_app/presentation/widget/image_bg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/global/screen_navigation.dart';
 import '../../widget/auth/header_txt.dart';
@@ -33,7 +34,7 @@ class _SignUpPageState extends State<SignUpPage> {
             body: Stack(
       children: [
         ImageBgWidget(
-            image: MImages.on1,
+            image: MImages.selBgImg(context),
             child: SingleChildScrollView(
                 child: Padding(
               padding: const EdgeInsets.only(
@@ -96,8 +97,13 @@ class _SignUpPageState extends State<SignUpPage> {
 
                               await auth.createUser();
                               if (auth.status == Status.userCreated) {
-                                changeScreen(context, const VerificationPage());
+                                SharedPreferences preferences =
+                                    await SharedPreferences.getInstance();
+                                await preferences.setInt('initScreen', 2);
+                                changeScreenReplacement(
+                                    context, const VerificationPage());
                               }
+                              // auth.clearControllers();
                             },
                             txt: "Continue"),
                         const SizedBox(
@@ -105,7 +111,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         NavToLogRegWidget(
                             txt2: 'Log in',
-                            txt1: 'Already have an account?',
+                            txt1: 'Already have an account? ',
                             onClick: () {
                               changeScreenReplacement(
                                   context, const LogInPage());

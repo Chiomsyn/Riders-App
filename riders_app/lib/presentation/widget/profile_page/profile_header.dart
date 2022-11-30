@@ -14,20 +14,20 @@ class ProfileHeader extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: bkClick,
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back,
-            color: mPrimary,
+            color: mPrimary(context),
           ),
         ),
-        const Text(
+        Text(
           "Profile",
-          style: TextStyle(color: white, fontSize: 15),
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         GestureDetector(
           onTap: doneClick,
-          child: const Text(
+          child: Text(
             "Done",
-            style: TextStyle(color: mPrimary),
+            style: TextStyle(color: mPrimary(context)),
           ),
         )
       ],

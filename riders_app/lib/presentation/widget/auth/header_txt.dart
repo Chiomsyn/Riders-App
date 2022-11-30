@@ -6,10 +6,6 @@ class HeaderTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      txt,
-      style: const TextStyle(
-          color: Colors.blueAccent, fontSize: 20, fontWeight: FontWeight.bold),
-    );
+    return Text(txt, style: Theme.of(context).textTheme.titleLarge);
   }
 }

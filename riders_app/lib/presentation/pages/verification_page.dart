@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:riders_app/core/global/screen_navigation.dart';
+import 'package:riders_app/presentation/pages/auth/log_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/global/images.dart';
 import '../../data_handler/auth.dart';
@@ -51,12 +54,24 @@ class _VerificationPageState extends State<VerificationPage> {
                     const SizedBox(
                       height: 30,
                     ),
-                    AppBtn(onClick: () {}, txt: "Submit"),
+                    AppBtn(
+                        onClick: () async {
+                          if (await auth.onOtpCodeSubmit()) {
+                            SharedPreferences preferences =
+                                await SharedPreferences.getInstance();
+                            await preferences.setInt('initScreen', 3);
+                            changeScreenReplacement(context, const LogInPage());
+                            auth.textControllers.clear();
+                          }
+                        },
+                        txt: "Submit"),
                     const SizedBox(
                       height: 20,
                     ),
                     AppBtn(
-                      onClick: () {},
+                      onClick: () async {
+                        auth.resendCode();
+                      },
                       txt: "Resend Code",
                       borderSide: true,
                     ),

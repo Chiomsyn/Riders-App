@@ -21,7 +21,7 @@ class NavToLogRegWidget extends StatelessWidget {
           children: <TextSpan>[
             TextSpan(
                 text: txt2,
-                style: const TextStyle(color: mPrimary, fontSize: 13),
+                style: const TextStyle(color: primary, fontSize: 13),
                 recognizer: TapGestureRecognizer()..onTap = onClick)
           ]),
     );
