@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:riders_app/core/global/app_var.dart';
 import 'package:riders_app/core/global/colors.dart';
 import 'package:riders_app/presentation/pages/auth/sign_up.dart';
 import 'package:riders_app/presentation/pages/profile_page.dart';
@@ -10,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/global/images.dart';
 import '../../../core/global/screen_navigation.dart';
-import '../../../data_handler/auth.dart';
+import '../../../data_handler/firebase/auth.dart';
 import '../../widget/auth/nav_log_reg.dart';
 import '../../widget/auth/rem_me.dart';
 import '../../widget/btn.dart';
@@ -26,6 +27,7 @@ class LogInPage extends StatefulWidget {
 
 class _LogInPageState extends State<LogInPage> {
   final _formKey = GlobalKey<FormState>();
+  bool _showPassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -48,18 +50,30 @@ class _LogInPageState extends State<LogInPage> {
                     child: Column(
                       children: [
                         AppEditBox(
-                            iconClick: () {},
                             hintText: "Enter Email",
                             label: "Email Address",
                             controller: auth.email,
-                            validator: (val) {}),
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Please enter Email Address';
+                              }
+                            }),
                         AppEditBox(
-                            iconClick: () {},
+                            iconClick: () {
+                              setState(() {
+                                _showPassword = !_showPassword;
+                              });
+                            },
                             hintText: "Enter Password",
                             label: "Password",
+                            showPassword: _showPassword,
                             isPassword: true,
                             controller: auth.password,
-                            validator: (val) {}),
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Please enter Password';
+                              }
+                            }),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -80,12 +94,25 @@ class _LogInPageState extends State<LogInPage> {
                         ),
                         AppBtn(
                             onClick: () async {
-                              if (await auth.logUserIn()) {
-                                SharedPreferences preferences =
-                                    await SharedPreferences.getInstance();
-                                await preferences.setInt('initScreen', 4);
-                                auth.clearControllers();
-                                changeScreenReplacement(context, ProfilePage());
+                              if (_formKey.currentState!.validate()) {
+                                if (await auth.logUserIn()) {
+                                  print("yess123");
+                                  if (currentFirebaseUser!.displayName ==
+                                      "user verified") {
+                                    print("yess");
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    await preferences.setInt('initScreen', 4);
+                                    auth.clearControllers();
+                                    changeScreen(context, ProfilePage());
+                                  }
+                                } else if (currentFirebaseUser!.displayName ==
+                                        "profileFullyUpdated" ||
+                                    currentFirebaseUser!.displayName ==
+                                        "profileUpdated") {
+                                } else {
+                                  print("user does not exist");
+                                }
                               }
                             },
                             txt: "Continue"),

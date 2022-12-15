@@ -7,7 +7,16 @@ import '../../../core/global/colors.dart';
 class UploadPicWidget extends StatelessWidget {
   VoidCallback onClick;
   String? image;
-  UploadPicWidget({this.image, required this.onClick, super.key});
+  bool? showCameraIcon;
+  Color ringColor;
+  Color bgColor;
+  UploadPicWidget(
+      {this.image,
+      required this.bgColor,
+      required this.ringColor,
+      this.showCameraIcon,
+      required this.onClick,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +32,11 @@ class UploadPicWidget extends StatelessWidget {
               decoration: BoxDecoration(
                   border: Border.all(
                     width: 2.0,
-                    color: bgColor(context),
+                    color: ringColor,
                   ),
                   borderRadius: BorderRadius.circular(100)),
               child: CircleAvatar(
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: bgColor,
                   radius: 35.0,
                   backgroundImage: ((image == null)
                       ? const AssetImage(MImages.person) as ImageProvider
@@ -36,19 +45,21 @@ class UploadPicWidget extends StatelessWidget {
                         ))),
             ),
           ),
-          Positioned(
-            top: 1,
-            right: 5,
-            child: Container(
-              height: 30,
-              width: 30,
-              decoration: BoxDecoration(
-                color: mPrimary(context),
-                borderRadius: BorderRadius.circular(100),
-              ),
-              child: Icon(Icons.camera_alt_outlined),
-            ),
-          )
+          showCameraIcon ?? false
+              ? Positioned(
+                  top: 1,
+                  right: 5,
+                  child: Container(
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      color: mPrimary(context),
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: Icon(Icons.camera_alt_outlined),
+                  ),
+                )
+              : Container()
         ],
       ),
     );

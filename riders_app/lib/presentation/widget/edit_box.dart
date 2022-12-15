@@ -10,11 +10,13 @@ class AppEditBox extends StatelessWidget {
   bool? showPassword;
   VoidCallback? iconClick;
   bool? isPassword;
+  AutovalidateMode? autovalidateMode;
 
   AppEditBox(
       {super.key,
       this.showPassword,
       this.iconClick,
+      this.autovalidateMode,
       required this.hintText,
       required this.label,
       required this.controller,
@@ -32,15 +34,16 @@ class AppEditBox extends StatelessWidget {
             label,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            height: 45,
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
             child: TextFormField(
-              style: const TextStyle(color: white),
+              style: const TextStyle(
+                color: white,
+              ),
               cursorColor: grey,
               obscureText: showPassword ?? false,
               autofocus: true,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
+              autovalidateMode: autovalidateMode,
               controller: controller,
               validator: (String? value) => validator(value),
               decoration: InputDecoration(
@@ -58,6 +61,8 @@ class AppEditBox extends StatelessWidget {
                         ),
                       )
                     : null,
+                errorBorder: const UnderlineInputBorder(),
+                focusedErrorBorder: const UnderlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
                     borderSide: border(context),
                     borderRadius: BorderRadius.circular(10.0)),
@@ -67,7 +72,7 @@ class AppEditBox extends StatelessWidget {
                 hintText: hintText, //hint text
                 hintStyle:
                     Theme.of(context).textTheme.labelMedium, //hint text style
-                hintMaxLines: 2,
+                hintMaxLines: 1,
               ),
             ),
           ),

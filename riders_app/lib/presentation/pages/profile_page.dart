@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:riders_app/core/global/app_var.dart';
 import 'package:riders_app/core/global/images.dart';
+import 'package:riders_app/data_handler/firebase/auth.dart';
+import 'package:riders_app/presentation/pages/home.dart';
 import 'package:riders_app/presentation/widget/profile_page/profile_header.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/global/colors.dart';
 import '../../core/global/screen_navigation.dart';
+import '../../data_handler/firebase/user_provider.dart';
 import '../widget/btn.dart';
 import '../widget/edit_box.dart';
 import '../widget/image_bg.dart';
@@ -25,12 +31,24 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _showPassword = true;
 
   @override
+  void initState() {
+    super.initState();
+
+    final user = Provider.of<AuthHandler>(context, listen: false);
+
+    name.text = user.user.name ?? '';
+    email.text = user.user.email ?? '';
+    number.text = user.user.phone ?? '';
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserServiceProvider>(context);
     return SafeArea(
       child: Scaffold(
         body: Stack(children: [
           ImageBgWidget(
-            image: MImages.on1,
+            image: MImages.selBgImg(context),
             child: SingleChildScrollView(
                 child: Padding(
               padding: const EdgeInsets.only(
@@ -42,12 +60,17 @@ class _ProfilePageState extends State<ProfilePage> {
                       doneClick: () async {
                         SharedPreferences preferences =
                             await SharedPreferences.getInstance();
-                        await preferences.setInt('initScreen', 5);
+                        await preferences.setInt('initScreen', 4);
+                        user.updateUserStatus1(currentFirebaseUser!.uid);
+                        changeScreen(context, HomePage());
                       }),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: UploadPicWidget(
+                      ringColor: bgColor(context),
+                      showCameraIcon: true,
                       onClick: () {},
+                      bgColor: profileBgColor(context),
                     ),
                   ),
                   Form(
@@ -91,7 +114,12 @@ class _ProfilePageState extends State<ProfilePage> {
                               onClick: () async {
                                 SharedPreferences preferences =
                                     await SharedPreferences.getInstance();
-                                await preferences.setInt('initScreen', 3);
+                                await preferences.setInt('initScreen', 4);
+
+                                if (await user.updateUserStatus1(
+                                    currentFirebaseUser!.uid)) {
+                                  changeScreen(context, HomePage());
+                                }
                               },
                               txt: "Continue"),
                         ],

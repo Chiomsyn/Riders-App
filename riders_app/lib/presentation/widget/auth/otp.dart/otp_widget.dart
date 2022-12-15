@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:riders_app/data_handler/auth.dart';
+import 'package:riders_app/data_handler/firebase/auth.dart';
 
 import 'opt_edit_box.dart';
 

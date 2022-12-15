@@ -13,7 +13,24 @@ Color mPrimary(context) {
 }
 
 Color bgColor(context) {
+  // dark - darkblue, white - white
   return Theme.of(context).backgroundColor;
+}
+
+Color textColor(context) {
+  return (Theme.of(context).brightness == Brightness.dark) ? white : black;
+}
+
+Color drawerProfileBgColor(context) {
+  return (Theme.of(context).brightness == Brightness.dark)
+      ? Theme.of(context).backgroundColor
+      : const Color(0xFFEEF6FF);
+}
+
+Color profileBgColor(context) {
+  return (Theme.of(context).brightness == Brightness.dark)
+      ? Colors.transparent
+      : white;
 }
 
 Color fillColor(context) {

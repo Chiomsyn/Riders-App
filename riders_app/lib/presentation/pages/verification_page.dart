@@ -5,7 +5,7 @@ import 'package:riders_app/presentation/pages/auth/log_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/global/images.dart';
-import '../../data_handler/auth.dart';
+import '../../data_handler/firebase/auth.dart';
 import '../widget/auth/edit_num_widget.dart';
 import '../widget/auth/header_txt.dart';
 import '../widget/auth/otp.dart/otp_widget.dart';
@@ -38,13 +38,13 @@ class _VerificationPageState extends State<VerificationPage> {
                 child: Column(
                   children: [
                     const HeaderTextWidget(txt: "Verification"),
-                    const SubHeaderTxt(
+                    SubHeaderTxt(
                         txt:
-                            "We have sent verification code to 08166879923. Kindly verify your phone number"),
+                            "We have sent verification code to +234${auth.number.text}. Kindly verify your phone number"),
                     Padding(
                       padding: const EdgeInsets.only(top: 40, bottom: 20),
                       child: EditNumWidget(
-                        txt: "+2348166879923",
+                        txt: "+234${auth.number.text}",
                       ),
                     ),
                     const Padding(
@@ -56,10 +56,12 @@ class _VerificationPageState extends State<VerificationPage> {
                     ),
                     AppBtn(
                         onClick: () async {
+                          print("huuh");
                           if (await auth.onOtpCodeSubmit()) {
                             SharedPreferences preferences =
                                 await SharedPreferences.getInstance();
-                            await preferences.setInt('initScreen', 3);
+                            await preferences.setString(
+                                'userStatus', "user verified");
                             changeScreenReplacement(context, const LogInPage());
                             auth.textControllers.clear();
                           }

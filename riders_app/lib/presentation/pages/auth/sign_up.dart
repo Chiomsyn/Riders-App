@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:riders_app/core/global/images.dart';
-import 'package:riders_app/data_handler/auth.dart';
+import 'package:riders_app/data_handler/firebase/auth.dart';
 import 'package:riders_app/presentation/pages/auth/log_in.dart';
 import 'package:riders_app/presentation/pages/verification_page.dart';
 import 'package:riders_app/presentation/widget/auth/nav_log_reg.dart';
@@ -47,23 +47,38 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: Column(
                       children: [
                         AppEditBox(
-                            iconClick: () {},
                             hintText: "Enter name",
                             label: "Name",
                             controller: auth.name,
-                            validator: (val) {}),
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Please enter Name';
+                              }
+                            }),
                         AppEditBox(
-                            iconClick: () {},
                             hintText: "Enter phone number",
                             label: "Phone Number",
                             controller: auth.number,
-                            validator: (val) {}),
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Please enter Phone Number';
+                              } else if (val.length > 10 || val.length < 10) {
+                                return 'Please enter a valid number';
+                              } else if (val.startsWith("0")) {
+                                return 'Number format should not start with 0';
+                              }
+                            }),
                         AppEditBox(
-                            iconClick: () {},
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             hintText: "Enter email address",
                             label: "Email Address",
                             controller: auth.email,
-                            validator: (val) {}),
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Please enter Email Address';
+                              }
+                            }),
                         AppEditBox(
                             iconClick: () {
                               setState(() {
@@ -75,7 +90,12 @@ class _SignUpPageState extends State<SignUpPage> {
                             showPassword: _showPassword,
                             isPassword: true,
                             controller: auth.password,
-                            validator: (val) {}),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter Password';
+                              }
+                              return null;
+                            }),
                         ServicePolicyWidget(
                           policyClick: () {},
                           termsClick: () {},
@@ -85,23 +105,27 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         AppBtn(
                             onClick: () async {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text('snack'),
-                                duration: Duration(seconds: 1),
-                                // action: SnackBarAction(
-                                //   label: 'ACTION',
-                                //   onPressed: () {},
-                                // ),
-                              ));
+                              if (_formKey.currentState!.validate()) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text('snack'),
+                                  duration: Duration(seconds: 1),
+                                  // action: SnackBarAction(
+                                  //   label: 'ACTION',
+                                  //   onPressed: () {},
+                                  // ),
+                                ));
 
-                              await auth.createUser();
-                              if (auth.status == Status.userCreated) {
-                                SharedPreferences preferences =
-                                    await SharedPreferences.getInstance();
-                                await preferences.setInt('initScreen', 2);
-                                changeScreenReplacement(
-                                    context, const VerificationPage());
+                                await auth.createUser();
+                                if (auth.status == Status.userCreated) {
+                                  SharedPreferences preferences =
+                                      await SharedPreferences.getInstance();
+                                  await preferences.setString(
+                                      'userStatus', "user created");
+                                  changeScreenReplacement(
+                                      context, const VerificationPage());
+                                  // auth.clearControllers();
+                                }
                               }
                               // auth.clearControllers();
                             },
